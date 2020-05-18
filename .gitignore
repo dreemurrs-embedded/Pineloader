@@ -1,0 +1,17 @@
+/*.img
+/*.apk
+/initramfs/bin/busybox
+/initramfs-*
+/build
+/dtbs
+/src/linux-rockchip
+/src/u-boot
+/src/arm-trusted-firmware
+/src/kexec-tools
+/src/bash
+/*.scr
+/*.dtb
+/*.img.xz
+/*.gz
+/*.bin
+/*.tar.bz2

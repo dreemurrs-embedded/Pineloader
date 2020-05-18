@@ -1,0 +1,66 @@
+#!/bin/sh
+
+## SPDX-License-Identifier: GPL-2.0-only
+## Init script for PineLoader
+## Copyright (C) 2020 - postmarketOS
+## Copyright (C) 2020 - Dreemurrs Embedded Labs / DanctNIX
+
+echo "Welcome to PineLoader"
+
+. /info.sh
+echo "Running on $PLATFORM"
+
+. /init_functions.sh
+
+# Environment variables that we want:
+IP=172.16.42.1
+
+# Create all the symlinks to /bin/busybox
+mkdir -p /usr/bin
+mkdir -p /sbin
+mkdir -p /usr/sbin
+echo "Installing Busybox..." && /bin/busybox --install -s
+
+# Mount things needed by this script
+mkdir /proc
+mkdir /sys
+mkdir /etc
+mkdir /mnt
+mkdir /plr
+mount -t proc proc /proc
+mount -t sysfs sysfs /sys
+
+mkdir /config
+mount -t configfs -o nodev,noexec,nosuid configfs /config
+
+# /dev/pts (needed for telnet)
+mkdir -p /dev/pts
+mount -t devpts devpts /dev/pts
+
+# LED indicator for MMC r/w access
+if [ -n "$LED" ]; then
+	echo $TRIGGER > /sys/class/leds/$LED/trigger
+fi
+
+# Create device nodes
+echo "Creating device nodes..."
+mknod /dev/null c 1 3
+mknod /dev/tty c 5 0
+mdev -s
+
+# Set kmap to volume buttons and power
+loadkmap < /vol.bmap
+
+# Final steps before running the bootloader..
+mount_boot_partition
+
+# This is the reason why you should always do FDE.
+# Nothing is secure, ever.
+setup_usb_configfs
+start_udhcpd
+setup_telnetd
+
+/pineloader
+
+# Don't kernel panic just in case if the pineloader script crashes
+loop_forever
