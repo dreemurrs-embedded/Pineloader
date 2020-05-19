@@ -161,4 +161,6 @@ cleanfast:
 clean: cleanfast
 	@rm -vf kernel*.gz
 	@rm -vf initramfs/bin/busybox
+	@rm -vf initramfs/bin/bash
+	@rm -vf initramfs/bin/kexec
 	@rm -vrf dtbs

@@ -1,6 +1,8 @@
 /*.img
 /*.apk
+/initramfs/bin/bash
 /initramfs/bin/busybox
+/initramfs/bin/kexec
 /initramfs-*
 /build
 /dtbs
