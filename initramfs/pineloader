@@ -99,15 +99,19 @@ done
 
 i=$(select_opt "${choices[@]}")
 key="${choices[$i]}"
-value="${config[$key]}"
+value="${config[$key]}" && $value
 
-if [ -z "$value" ]; then
-	echo "ERROR: The selected boot variables are blank, please debug the issue by telnet to:"
-	echo "$IP"
+if [ -z "$value" ] || [ -z "$KERNEL" ]; then
+	echo "ERROR: The selected boot variables are blank, please check for syntax, double quote in your config file."
 else
+	# Building up the kexec command line
+	KEXEC_CMD=("kexec" "-l" "$KERNEL")
+	[[ "$INITRD"  ]] && KEXEC_CMD+=("--initrd" "$INITRD")
+	[[ "$CMDLINE" ]] && KEXEC_CMD+=("--command-line" "$CMDLINE")
+
 	mount -o ro $BOOTPART /mnt
 	echo "Loading kernel and ramdisk to memory..."
-	kexec -l --initrd="$INITRD" --command-line="$CMDLINE" $KERNEL
+	"${KEXEC_CMD[@]}"
 	echo "Starting kernel..."
 	kexec -e
 fi

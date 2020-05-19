@@ -63,4 +63,6 @@ setup_telnetd
 /pineloader
 
 # Don't kernel panic just in case if the pineloader script crashes
+echo "ERROR: Pineloader script finished, this is not supposed to happen!"
+echo "Please telnet to $IP and diagnose the issue."
 loop_forever
