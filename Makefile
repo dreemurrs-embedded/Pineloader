@@ -78,6 +78,7 @@ initramfs/bin/kexec: src/kexec-tools
 	LDFLAGS=-static ../../src/kexec-tools/configure --host=aarch64-linux-gnu
 	@$(MAKE) -C build/kexec-tools
 	@aarch64-linux-gnu-strip build/kexec-tools/build/sbin/kexec
+	@upx --best build/kexec-tools/build/sbin/kexec
 	@cp build/kexec-tools/build/sbin/kexec initramfs/bin/kexec
 
 initramfs-%.cpio: initramfs/bin/busybox initramfs/bin/bash initramfs/bin/kexec initramfs/init initramfs/init_functions.sh initramfs/pineloader
