@@ -1,3 +1,8 @@
+## Copyright 2020 - Dreemurrs Embedded Labs / DanctNIX
+## Copyright 2020 - Martijn Braam
+
+## SPDX-License-Identifier: GPL-2.0-only
+
 CROSS_FLAGS = ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu-
 CROSS_FLAGS_BOOT = CROSS_COMPILE=aarch64-linux-gnu-
 
